@@ -1,28 +1,36 @@
-import { useState } from 'react'
+import React, { useRef, useState } from 'react';
+import { motion } from 'framer-motion';
+import TopHeader from './components/TopHeader';
+import HeroScene from './components/HeroScene';
+import AlphabetGame from './components/AlphabetGame';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [bananas, setBananas] = useState(0); // display only; game owns true count
+  const bananaTargetRef = useRef(null);
+
+  // We mirror banana count from game via a callback event. Simple approach: observe DOM text updates
+  // For clarity and separation, AlphabetGame will receive the ref and render the counter itself; TopHeader shows monkey and scene
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 flex items-center justify-center">
-      <div className="bg-white p-8 rounded-lg shadow-lg">
-        <h1 className="text-3xl font-bold text-gray-800 mb-4">
-          Vibe Coding Platform
-        </h1>
-        <p className="text-gray-600 mb-6">
-          Your AI-powered development environment
-        </p>
-        <div className="text-center">
-          <button
-            onClick={() => setCount(count + 1)}
-            className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded"
-          >
-            Count is {count}
-          </button>
-        </div>
+    <div className="min-h-screen w-full bg-emerald-50 flex items-center justify-center">
+      <div className="w-[1512px] h-[982px] max-w-full max-h-screen overflow-auto p-6">
+        <TopHeader bananas={bananas} bananaTargetRef={bananaTargetRef} />
+        <div className="my-6" />
+        <HeroScene />
+        <div className="my-6" />
+        <AlphabetGame onBananaTargetRef={bananaTargetRef} />
+        <motion.div
+          className="sr-only"
+          aria-hidden
+          initial={false}
+          animate={{}}
+          onUpdate={() => {
+            // noop placeholder to keep framer-motion import used
+          }}
+        />
       </div>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
